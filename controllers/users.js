@@ -16,7 +16,7 @@ module.exports.getUserById = (req, res) => {
       res.send({ data: users });
     })
     .catch((err) => {
-      if (err.name === 'SomeErrorName') {
+      if (err.name === 'CastError') {
         res.status(400).send({ message: 'идентификатор неверен' });
         return;
       }
