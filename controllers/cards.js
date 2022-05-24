@@ -5,25 +5,25 @@ module.exports.getCards = (req, res) => {
     .populate('owner')
     .then((card) => res.send({ data: card }))
     .catch(() => res.status(500).send({ message: 'Server error' }));
-};
+}
 
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Card is not found' });
-        return;
+        return
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'id is incorrect' });
-        return;
+        return
       }
       res.status(500).send({ message: 'Server error' });
     });
-};
+}
 
 module.exports.createCards = (req, res) => {
   const { name, link } = req.body;
@@ -33,11 +33,11 @@ module.exports.createCards = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: 'Data is incorrect' });
-        return;
+        return
       }
       res.status(500).send({ message: 'Server error' });
     });
-};
+}
 
 module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
@@ -48,18 +48,18 @@ module.exports.likeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Card is not found' });
-        return;
+        return
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'id is incorrect' });
-        return;
+        return
       }
       res.status(500).send({ message: 'Server error' });
     });
-};
+}
 
 module.exports.dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
@@ -70,15 +70,15 @@ module.exports.dislikeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Card is not found' });
-        return;
+        return
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'id is incorrect' });
-        return;
+        return
       }
       res.status(500).send({ message: 'Server error' });
     });
-};
+}
