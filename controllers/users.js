@@ -3,24 +3,24 @@ const User = require('../models/user');
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(() => res.status(500).send({ message: 'Server error' }));
+    .catch(() => res.status(500).send({ message: 'Ошибка сервера' }));
 };
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.userId)
     .then((users) => {
       if (!users) {
-        res.status(404).send({ message: 'User is not found' });
+        res.status(404).send({ message: 'Пользователь не найден' });
         return;
       }
       res.send({ data: users });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'id is incorrect' });
+      if (err.name === 'SomeErrorName') {
+        res.status(400).send({ message: 'идентификатор неверен' });
         return;
       }
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -30,10 +30,10 @@ module.exports.createUsers = (req, res) => {
     .then((user) => res.status(201).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Data is incorrect' });
+        res.status(400).send({ message: 'Введенные данные некорректны' });
         return;
       }
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -46,17 +46,17 @@ module.exports.updateUserInfo = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'User is not found' });
+        res.status(404).send({ message: 'Пользователь не найден' });
         return;
       }
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Data is incorrect' });
+        res.status(400).send({ message: 'Введенные данные некорректны' });
         return;
       }
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -69,16 +69,16 @@ module.exports.updateUserAvatar = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'User is not found' });
+        res.status(404).send({ message: 'Пользователь не найден' });
         return;
       }
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Data is incorrect' });
+        res.status(400).send({ message: 'Введенные данные некорректны' });
         return;
       }
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };

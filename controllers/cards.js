@@ -4,25 +4,7 @@ module.exports.getCards = (req, res) => {
   Card.find({})
     .populate('owner')
     .then((card) => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Server error' }));
-};
-
-module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: 'Card is not found' });
-        return;
-      }
-      res.send({ data: card });
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'id is incorrect' });
-        return;
-      }
-      res.status(500).send({ message: 'Server error' });
-    });
+    .catch(() => res.status(500).send({ message: 'Ошибка сервера' }));
 };
 
 module.exports.createCards = (req, res) => {
@@ -32,10 +14,10 @@ module.exports.createCards = (req, res) => {
     .then((card) => res.status(201).send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Data is incorrect' });
+        res.status(400).send({ message: 'Введенные данные некорректны' });
         return;
       }
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -47,17 +29,17 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Card is not found' });
+        res.status(404).send({ message: 'Карточка не найдена' });
         return;
       }
       res.send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'id is incorrect' });
+      if (err.name === 'SomeErrorName') {
+        res.status(400).send({ message: 'идентификатор неверен' });
         return;
       }
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -69,16 +51,34 @@ module.exports.dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Card is not found' });
+        res.status(404).send({ message: 'Карточка не найдена' });
         return;
       }
       res.send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'id is incorrect' });
+      if (err.name === 'SomeErrorName') {
+        res.status(400).send({ message: 'идентификатор неверен' });
         return;
       }
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Ошибка сервера' });
+    });
+};
+
+module.exports.deleteCard = (req, res) => {
+  Card.findByIdAndRemove(req.params.cardId)
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: 'Карточка не найдена' });
+        return;
+      }
+      res.send({ data: card });
+    })
+    .catch((err) => {
+      if (err.name === 'SomeErrorName') {
+        res.status(400).send({ message: 'идентификатор неверен' });
+        return;
+      }
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };

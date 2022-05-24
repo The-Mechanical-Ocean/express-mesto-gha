@@ -9,7 +9,7 @@ mongoose.connect('mongodb://127.0.0.1/mestodb');
 app.use(express.json());
 app.use((req, res, next) => {
   req.user = {
-    _id: '62827c67f5f0bf762496ac4a',
+    _id: '628c9beffa7c2a40511caad4',
   };
   next();
 });
@@ -18,7 +18,7 @@ app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
 app.use((req, res) => {
-  res.status(404).send({ message: 'Sorry, page not found' });
+  res.status(404).send({ message: 'Извините, страница не найдена' });
 });
 
 app.listen(PORT);
