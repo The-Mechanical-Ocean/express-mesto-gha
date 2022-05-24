@@ -5,7 +5,7 @@ const app = express();
 const { PORT = 3000 } = process.env;
 
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
+mongoose.connect('mongodb://127.0.0.1/mestodb');
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -14,6 +14,7 @@ app.use((req, res, next) => {
   };
   next();
 });
+
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
