@@ -1,5 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const auth = require('./middlewares/auth');
 const { errors, Joi, celebrate } = require('celebrate');
 const { createUsers, login } = require('./controllers/users');
@@ -7,9 +11,17 @@ const { createUsers, login } = require('./controllers/users');
 const app = express();
 const { PORT = 3000 } = process.env;
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
 mongoose.connect('mongodb://127.0.0.1/mestodb');
 
 app.use(express.json());
+app.use(cookieParser());
+app.use(helmet());
+app.use(limiter);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({

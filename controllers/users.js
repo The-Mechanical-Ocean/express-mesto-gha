@@ -2,6 +2,8 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
@@ -26,9 +28,19 @@ module.exports.getUserById = (req, res) => {
     });
 };
 
+module.exports.findUserMe = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((users) => {
+      res.send({ data: users });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 module.exports.createUsers = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  const { name, about, avatar, email } = req.body;
+  User.create({ name, about, avatar, email, password: hash })
     .then((user) => res.status(201).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -82,5 +94,23 @@ module.exports.updateUserAvatar = (req, res) => {
         return;
       }
       res.status(500).send({ message: 'Ошибка сервера' });
+    });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      res.cookie('jwt', token, {
+        maxAge: 604800000,
+        httpOnly: true,
+      }).send({ data: token });
+    })
+    .catch((err) => {
+      if (err.name === 'Error') {
+        next(new UnauthorizedError('Email or password are incorrect'));
+      }
+      next(err);
     });
 };
