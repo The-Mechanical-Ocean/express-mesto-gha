@@ -123,7 +123,7 @@ module.exports.login = (req, res, next) => {
         httpOnly: true,
         sameSite: true,
       })
-      res.status(201).send({ data: token });
+      res.status(200).send({ data: token });
     })
     .catch((err) => {
       if (err.name === 'Error') {
