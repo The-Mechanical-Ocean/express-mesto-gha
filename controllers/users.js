@@ -122,7 +122,8 @@ module.exports.login = (req, res, next) => {
         maxAge: 604800000,
         httpOnly: true,
         sameSite: true,
-      }).send({ data: token });
+      })
+      res.status(201).send({ data: token });
     })
     .catch((err) => {
       if (err.name === 'Error') {
