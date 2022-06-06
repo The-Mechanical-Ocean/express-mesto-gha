@@ -43,6 +43,8 @@ module.exports.findUserMe = (req, res, next) => {
 
 module.exports.createUsers = (req, res, next) => {
   const { name, about, avatar, email } = req.body;
+  bcrypt.hash(req.body.password, 10)
+  .then((hash) => {
   User.create({ name, about, avatar, email, password: hash })
     .then((user) => res.status(201).send({ data: user }))
     .catch((err) => {
@@ -56,6 +58,7 @@ module.exports.createUsers = (req, res, next) => {
       }
       next(err);
     });
+  });
 };
 
 module.exports.updateUserInfo = (req, res, next) => {
@@ -110,6 +113,7 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 604800000,
         httpOnly: true,
+        sameSite: true,
       }).send({ data: token });
     })
     .catch((err) => {
