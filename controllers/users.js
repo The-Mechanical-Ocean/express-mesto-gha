@@ -122,7 +122,7 @@ module.exports.login = (req, res, next) => {
         maxAge: 604800000,
         httpOnly: true,
         sameSite: true,
-      })
+      });
       res.status(200).send({ data: token });
     })
     .catch((err) => {
