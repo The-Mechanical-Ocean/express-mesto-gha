@@ -4,9 +4,10 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const auth = require('./middlewares/auth');
 const { errors, Joi, celebrate } = require('celebrate');
+const auth = require('./middlewares/auth');
 const { createUsers, login } = require('./controllers/users');
+const NotFoundError = require('./errors/NotFound');
 
 const app = express();
 const { PORT = 3000 } = process.env;

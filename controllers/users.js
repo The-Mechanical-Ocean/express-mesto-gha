@@ -1,6 +1,6 @@
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequest');
 const UnauthorizedError = require('../errors/Unauthorized');
 const NotFoundError = require('../errors/NotFound');
@@ -42,23 +42,27 @@ module.exports.findUserMe = (req, res, next) => {
 };
 
 module.exports.createUsers = (req, res, next) => {
-  const { name, about, avatar, email } = req.body;
+  const {
+    name, about, avatar, email,
+  } = req.body;
   bcrypt.hash(req.body.password, 10)
-  .then((hash) => {
-  User.create({ name, about, avatar, email, password: hash })
-    .then((user) => res.status(201).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Введенные данные некорректны'));
-        return;
-      }
-      if (err.code === 11000) {
-        next(new ConflictError('пользователь с этим e-mail уже существует'));
-        return;
-      }
-      next(err);
+    .then((hash) => {
+      User.create({
+        name, about, avatar, email, password: hash,
+      })
+        .then(() => res.status(201).send({ data: { name, about, avatar, email } }))
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            next(new BadRequestError('Введенные данные некорректны'));
+            return;
+          }
+          if (err.code === 11000) {
+            next(new ConflictError('пользователь с этим e-mail уже существует'));
+            return;
+          }
+          next(err);
+        });
     });
-  });
 };
 
 module.exports.updateUserInfo = (req, res, next) => {
