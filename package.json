@@ -4,7 +4,7 @@
   "description": "[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)\r # Проект Mesto фронтенд + бэкенд",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node app.js",
+    "start": "node app.js",
     "dev": "nodemon app.js",
     "lint": "npx eslint ."
   },
@@ -26,10 +26,12 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-rate-limit": "^6.4.0",
+    "express-winston": "^4.2.0",
     "helmet": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.4",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "eslint": "^8.16.0",

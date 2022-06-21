@@ -1,4 +1,4 @@
-// require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -8,6 +8,7 @@ const { errors, Joi, celebrate } = require('celebrate');
 const auth = require('./middlewares/auth');
 const { createUsers, login } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFound');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -23,7 +24,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
 app.use(limiter);
+app.use(requestLogger);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -47,6 +54,8 @@ app.use('/cards', require('./routes/cards'));
 app.use((req, res, next) => {
   next(new NotFoundError('Извините, страница не найдена'));
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
